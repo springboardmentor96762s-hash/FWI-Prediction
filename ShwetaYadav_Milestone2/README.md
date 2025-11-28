@@ -1,5 +1,5 @@
 # Milestone 2 : Forest Fire Weather Index (FWI) Prediction using Ridge Regression
-This project builds a Ridge Regression model to predict the Fire Weather Index (FWI) using real-world meteorological and fire-danger indicators such as temperature, humidity, windspeed, DC, DMC, ISI, BUI, etc.
+This project builds a Ridge Regression model to predict the Fire Weather Index (FWI) using real-world meteorological and fire-danger indicators such as temperature, humidity, windspeed, DC, DMC, ISI, BUI, etc. 
 
 # The workflow includes:
 Feature Engineering
