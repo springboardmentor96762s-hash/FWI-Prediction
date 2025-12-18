@@ -1,0 +1,10 @@
+Project Name : Tempest FWI Predictor – A Machine Learning Model to Predict Fire Weather Index
+
+Milestone - 1
+
+The goals were:
+1. Collect Dataset - I collected the dataset from the website Kaggle (https://www.kaggle.com/). I downloaded the Algerian Forest Fire dataset. The dataset contains the attributes- day, month, year, temperature, rh, ws, rain, ffmc, dmc, dc, isi, bui, fwi, region, class.
+
+2. Preprocess dataset - I performed the prepocessing using pandas library. I checked for null values and found none. The dataset was divided into two regions. I merged them into one and added a column region to indicate which region the corresponding row values belonged. There was a column 'class' which contained values 'fire','not fire' I changed it into binary 0(represent not fire), 1(represents fire).
+
+3. Analysing the data - I plotted a Histogram of all attributes (excluding day,month,year,class) against FWI. From the histogram we can understand what value of an attribute results in a higher or lower FWI (For eg. At a certain temperature range was the FWI high or low). I plotted a corelation plot which helps analyze how an attribute values changes affect the FWI value. From the plot I found out that rain and relative humdity(rh) are negatively corelated and other attributes are positively corelated with FWI. ISI has the highest corelation with FWI. I also plotted a boxplot for outlier detection. The dataset contains several natural outliers across fire-weather indices, especially in DMC, DC, BUI, FFMC, and FWI. These outliers represent extreme fire-risk conditions, not measurement errors. Since wildataire behavior is highly sensitive to extreme weather, these outliers were not removed. Instead, they were retained to preserve the true variability required for accurate FWI prediction.
