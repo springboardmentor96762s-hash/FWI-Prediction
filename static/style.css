@@ -1,0 +1,952 @@
+/* ========================================
+   FIRE WEATHER INDEX - CREATIVE STYLING
+   ======================================== */
+
+/* Root Variables */
+:root {
+    --color-primary: #ff6b35;
+    --color-secondary: #f7931e;
+    --color-accent: #fdb833;
+    --color-dark: #1a1a1a;
+    --color-light: #f5f5f5;
+    --color-text: #333;
+    --color-border: #ddd;
+    
+    /* Status Colors */
+    --status-low: #4caf50;
+    --status-moderate: #ff9800;
+    --status-high: #f44336;
+    --status-very-high: #c41c3b;
+    --status-extreme: #8b0000;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+    --shadow-fire: 0 0 20px rgba(255, 107, 53, 0.5);
+}
+
+/* ========================================
+   GLOBAL STYLES
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: var(--color-text);
+    line-height: 1.6;
+    position: relative;
+}
+
+/* ========================================
+   ANIMATED FIRE BACKGROUND
+   ======================================== */
+
+.fire-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(26, 26, 26, 0.95) 0%, rgba(45, 45, 45, 0.95) 100%);
+    z-index: -1;
+    overflow: hidden;
+}
+
+.flame {
+    position: absolute;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(255, 107, 53, 0.3) 0%, transparent 70%);
+    border-radius: 50% 50% 50% 50%;
+    filter: blur(20px);
+    animation: flicker 3s ease-in-out infinite;
+}
+
+.flame1 {
+    width: 200px;
+    height: 300px;
+    left: 10%;
+    animation-delay: 0s;
+    opacity: 0.3;
+}
+
+.flame2 {
+    width: 150px;
+    height: 250px;
+    left: 50%;
+    animation-delay: 0.5s;
+    opacity: 0.25;
+}
+
+.flame3 {
+    width: 180px;
+    height: 280px;
+    right: 10%;
+    animation-delay: 1s;
+    opacity: 0.3;
+}
+
+.flame4 {
+    width: 160px;
+    height: 260px;
+    left: 30%;
+    animation-delay: 1.5s;
+    opacity: 0.2;
+}
+
+@keyframes flicker {
+    0%, 100% {
+        transform: translateY(0) scaleY(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateY(-20px) scaleY(1.1);
+        opacity: 0.5;
+    }
+}
+
+/* ========================================
+   CONTAINER & LAYOUT
+   ======================================== */
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(247, 147, 30, 0.1) 100%);
+    border-radius: 15px;
+    border: 2px solid var(--color-primary);
+    box-shadow: var(--shadow-fire);
+    animation: slideDown 0.6s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header-content {
+    position: relative;
+}
+
+.title {
+    font-size: 2.5em;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    font-size: 1.1em;
+    color: var(--color-accent);
+    font-weight: 300;
+}
+
+.main-content {
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   FORM STYLES
+   ======================================== */
+
+.fire-form {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 245, 245, 0.95) 100%);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 30px;
+    border-left: 5px solid var(--color-primary);
+}
+
+.form-section {
+    margin-bottom: 35px;
+}
+
+.form-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-title {
+    font-size: 1.4em;
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-row:last-child {
+    margin-bottom: 0;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+.form-input {
+    padding: 12px 15px;
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    background: white;
+    color: var(--color-text);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+    background: #fffbf7;
+}
+
+.select-input {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff6b35' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    padding-right: 40px;
+}
+
+.form-hint {
+    font-size: 0.8em;
+    color: #999;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-fire);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(255, 107, 53, 0.6);
+}
+
+.submit-btn:active {
+    transform: translateY(-1px);
+}
+
+.btn-text {
+    display: inline;
+}
+
+.btn-icon {
+    font-size: 1.3em;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* ========================================
+   INFO BOX
+   ======================================== */
+
+.info-box {
+    background: linear-gradient(135deg, rgba(253, 184, 51, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+    border: 2px solid var(--color-accent);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.info-title {
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.info-text {
+    color: #555;
+    line-height: 1.8;
+}
+
+/* ========================================
+   FIRE ALARM SECTION
+   ======================================== */
+
+.alarm-section {
+    margin-bottom: 30px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.alarm-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px;
+    color: white;
+    font-weight: 600;
+}
+
+.alarm-icon {
+    font-size: 3em;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.alarm-text {
+    flex: 1;
+}
+
+.alarm-title {
+    font-size: 1.3em;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.alarm-message {
+    font-size: 0.95em;
+    opacity: 0.95;
+    margin: 0;
+}
+
+/* Alarm Status Colors */
+.alarm-low {
+    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+}
+
+.alarm-moderate {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+}
+
+.alarm-high {
+    background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+}
+
+.alarm-very-high {
+    background: linear-gradient(135deg, #c41c3b 0%, #a01830 100%);
+}
+
+.alarm-extreme {
+    background: linear-gradient(135deg, #8b0000 0%, #660000 100%);
+}
+
+/* Alarm Pulse Animations */
+.alarm-pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.alarm-pulse-fast {
+    animation: pulse-fast 1s ease-in-out infinite;
+}
+
+.alarm-pulse-faster {
+    animation: pulse-faster 0.7s ease-in-out infinite;
+}
+
+.alarm-pulse-extreme {
+    animation: pulse-extreme 0.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+@keyframes pulse-fast {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.15);
+        opacity: 0.7;
+    }
+}
+
+@keyframes pulse-faster {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.6;
+    }
+}
+
+@keyframes pulse-extreme {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    25% {
+        transform: scale(1.25) rotate(5deg);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.1) rotate(-5deg);
+        opacity: 1;
+    }
+    75% {
+        transform: scale(1.25) rotate(5deg);
+        opacity: 0.8;
+    }
+}
+
+/* ========================================
+   RESULTS PAGE STYLES
+   ======================================== */
+
+.results-content {
+    padding-bottom: 40px;
+}
+
+.region-card {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
+    border: 2px solid #4caf50;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.region-title {
+    color: #2e7d32;
+    font-size: 1.2em;
+}
+
+.region-value {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* FWI Result Container */
+.fwi-result-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+    align-items: center;
+}
+
+.fwi-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fwi-value-box {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: var(--shadow-fire);
+    animation: scaleIn 0.6s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.fwi-label {
+    display: block;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+.fwi-number {
+    display: block;
+    font-size: 3.5em;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Status Card */
+.status-card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    animation: slideIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.status-header {
+    padding: 20px;
+    color: white;
+    font-weight: 700;
+}
+
+.status-title {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.status-body {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.status-message {
+    color: #333;
+    line-height: 1.8;
+    font-size: 0.95em;
+}
+
+/* Status Color Variants */
+.status-low .status-header {
+    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+}
+
+.status-moderate .status-header {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+}
+
+.status-high .status-header {
+    background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+}
+
+.status-very-high .status-header {
+    background: linear-gradient(135deg, #c41c3b 0%, #a01830 100%);
+}
+
+.status-extreme .status-header {
+    background: linear-gradient(135deg, #8b0000 0%, #660000 100%);
+}
+
+/* ========================================
+   RECOMMENDATIONS SECTION
+   ======================================== */
+
+.recommendations-section {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 245, 245, 0.95) 100%);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-lg);
+    border-left: 5px solid var(--color-primary);
+}
+
+.recommendations-title {
+    color: var(--color-primary);
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-accent);
+}
+
+.recommendation-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    border-left: 4px solid var(--color-secondary);
+}
+
+.recommendation-header {
+    color: var(--color-primary);
+    font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+.recommendation-list {
+    list-style: none;
+    padding: 0;
+}
+
+.recommendation-list li {
+    padding: 8px 0;
+    padding-left: 25px;
+    position: relative;
+    color: #555;
+}
+
+.recommendation-list li:before {
+    content: "🔥";
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+}
+
+/* ========================================
+   FWI SCALE SECTION
+   ======================================== */
+
+.fwi-scale-section {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 245, 245, 0.95) 100%);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-lg);
+}
+
+.scale-title {
+    color: var(--color-primary);
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-accent);
+}
+
+.fwi-scale {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.scale-item {
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.scale-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.scale-range {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    opacity: 0.9;
+}
+
+.scale-label {
+    display: block;
+    font-size: 1.2em;
+}
+
+.scale-low {
+    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+}
+
+.scale-moderate {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+}
+
+.scale-high {
+    background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+}
+
+.scale-very-high {
+    background: linear-gradient(135deg, #c41c3b 0%, #a01830 100%);
+}
+
+.scale-extreme {
+    background: linear-gradient(135deg, #8b0000 0%, #660000 100%);
+}
+
+/* ========================================
+   ACTION BUTTONS
+   ======================================== */
+
+.action-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+/* Responsive Alarm Section */
+@media (max-width: 768px) {
+    .alarm-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .alarm-icon {
+        font-size: 2.5em;
+    }
+
+    .alarm-title {
+        font-size: 1.1em;
+    }
+
+    .alarm-message {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .alarm-container {
+        padding: 15px;
+    }
+
+    .alarm-icon {
+        font-size: 2em;
+    }
+
+    .alarm-title {
+        font-size: 1em;
+    }
+
+    .alarm-message {
+        font-size: 0.85em;
+    }
+}
+
+.btn {
+    padding: 12px 30px;
+    border-radius: 50px;
+    border: none;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+    box-shadow: var(--shadow-fire);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(255, 107, 53, 0.6);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+}
+
+.btn-icon {
+    font-size: 1.2em;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2em;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .fwi-result-container {
+        grid-template-columns: 1fr;
+    }
+
+    .fire-form {
+        padding: 25px;
+    }
+
+    .header {
+        padding: 25px 15px;
+    }
+
+    .fwi-number {
+        font-size: 2.5em;
+    }
+
+    .fwi-scale {
+        grid-template-columns: 1fr;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 1.5em;
+    }
+
+    .subtitle {
+        font-size: 0.9em;
+    }
+
+    .section-title {
+        font-size: 1.1em;
+    }
+
+    .fire-form {
+        padding: 20px;
+    }
+
+    .fwi-value-box {
+        padding: 30px 20px;
+    }
+
+    .fwi-number {
+        font-size: 2em;
+    }
+
+    .recommendations-section,
+    .fwi-scale-section {
+        padding: 20px;
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    .fire-background,
+    .flame {
+        display: none;
+    }
+
+    body {
+        background: white;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    .header,
+    .fire-form,
+    .status-card,
+    .recommendations-section,
+    .fwi-scale-section {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+
+    .action-buttons {
+        display: none;
+    }
+}

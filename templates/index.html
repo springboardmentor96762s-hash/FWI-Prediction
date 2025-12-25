@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Fire Weather Index Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="fire-background">
+        <div class="flame flame1"></div>
+        <div class="flame flame2"></div>
+        <div class="flame flame3"></div>
+        <div class="flame flame4"></div>
+    </div>
+
+    <!-- Main container -->
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">🔥 Fire Weather Index Predictor</h1>
+                <p class="subtitle">Predict fire danger levels based on weather conditions</p>
+            </div>
+        </header>
+
+        <!-- Form Section -->
+        <main class="main-content">
+            <form method="POST" action="/predict" class="fire-form">
+                <!-- Region Selection -->
+                <div class="form-section">
+                    <h2 class="section-title">📍 Select Region</h2>
+                    <div class="form-group">
+                        <label for="Region" class="form-label">Region:</label>
+                        <select id="Region" name="Region" class="form-input select-input" required>
+                            <option value="">-- Choose a Region --</option>
+                            {% for region in regions %}
+                                <option value="{{ region }}">{{ region }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Weather Conditions Section -->
+                <div class="form-section">
+                    <h2 class="section-title">🌡️ Weather Conditions</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="Temperature" class="form-label">Temperature (°C):</label>
+                            <input type="number" id="Temperature" name="Temperature" step="0.1" class="form-input" placeholder="e.g., 25.5" required>
+                            <span class="form-hint">Ambient temperature</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="RH" class="form-label">Relative Humidity (%):</label>
+                            <input type="number" id="RH" name="RH" step="0.1" min="0" max="100" class="form-input" placeholder="e.g., 65" required>
+                            <span class="form-hint">0-100%</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="Ws" class="form-label">Wind Speed (km/h):</label>
+                            <input type="number" id="Ws" name="Ws" step="0.1" min="0" class="form-input" placeholder="e.g., 15" required>
+                            <span class="form-hint">Wind velocity</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Rain" class="form-label">Rain (mm):</label>
+                            <input type="number" id="Rain" name="Rain" step="0.1" min="0" class="form-input" placeholder="e.g., 0" required>
+                            <span class="form-hint">Rainfall amount</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fire Index Components Section -->
+                <div class="form-section">
+                    <h2 class="section-title">🔥 Fire Index Components</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="FFMC" class="form-label">FFMC (Fine Fuel Moisture Code):</label>
+                            <input type="number" id="FFMC" name="FFMC" step="0.1" class="form-input" placeholder="e.g., 86.2" required>
+                            <span class="form-hint">0-101</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="DMC" class="form-label">DMC (Duff Moisture Code):</label>
+                            <input type="number" id="DMC" name="DMC" step="0.1" class="form-input" placeholder="e.g., 26.2" required>
+                            <span class="form-hint">0-655</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="DC" class="form-label">DC (Drought Code):</label>
+                            <input type="number" id="DC" name="DC" step="0.1" class="form-input" placeholder="e.g., 94.3" required>
+                            <span class="form-hint">0-1000</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="ISI" class="form-label">ISI (Initial Spread Index):</label>
+                            <input type="number" id="ISI" name="ISI" step="0.1" class="form-input" placeholder="e.g., 10.7" required>
+                            <span class="form-hint">0-56</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="BUI" class="form-label">BUI (Buildup Index):</label>
+                            <input type="number" id="BUI" name="BUI" step="0.1" class="form-input" placeholder="e.g., 120.5" required>
+                            <span class="form-hint">0-1000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="button-container">
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-text">Predict Fire Danger</span>
+                        <span class="btn-icon">🔥</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Information Box -->
+            <div class="info-box">
+                <h3 class="info-title">ℹ️ About This Tool</h3>
+                <p class="info-text">
+                    This Fire Weather Index (FWI) predictor uses machine learning to estimate fire danger based on weather conditions 
+                    and fire index components from the Canadian Forest Service FWI System. The model helps identify potential fire risks 
+                    and supports decision-making for fire management and prevention strategies.
+                </p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

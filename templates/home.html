@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Fire Weather Index - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="fire-background">
+        <div class="flame flame1"></div>
+        <div class="flame flame2"></div>
+        <div class="flame flame3"></div>
+        <div class="flame flame4"></div>
+    </div>
+
+    <!-- Main container -->
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">🔥 Fire Weather Index Results</h1>
+                <p class="subtitle">Your fire danger assessment</p>
+            </div>
+        </header>
+
+        <!-- Results Section -->
+        <main class="main-content results-content">
+            <!-- Region Display -->
+            <div class="region-card">
+                <h2 class="region-title">📍 Region: <span class="region-value">{{ region }}</span></h2>
+            </div>
+
+            <!-- Fire Alarm Section - Dynamic based on status -->
+            <div class="alarm-section alarm-{{ status|lower|replace(' ', '-') }}">
+                {% if status == "Low" %}
+                    <div class="alarm-container alarm-low">
+                        <div class="alarm-icon">✅</div>
+                        <div class="alarm-text">
+                            <p class="alarm-title">All Clear</p>
+                            <p class="alarm-message">Fire danger is minimal. Continue monitoring.</p>
+                        </div>
+                    </div>
+                {% elif status == "Moderate" %}
+                    <div class="alarm-container alarm-moderate">
+                        <div class="alarm-icon alarm-pulse">⚠️</div>
+                        <div class="alarm-text">
+                            <p class="alarm-title">Caution Alert</p>
+                            <p class="alarm-message">Moderate fire danger detected. Increase awareness.</p>
+                        </div>
+                    </div>
+                {% elif status == "High" %}
+                    <div class="alarm-container alarm-high">
+                        <div class="alarm-icon alarm-pulse-fast">🔴</div>
+                        <div class="alarm-text">
+                            <p class="alarm-title">High Alert</p>
+                            <p class="alarm-message">High fire danger! Restrict outdoor burning activities.</p>
+                        </div>
+                    </div>
+                {% elif status == "Very High" %}
+                    <div class="alarm-container alarm-very-high">
+                        <div class="alarm-icon alarm-pulse-faster">🔴</div>
+                        <div class="alarm-text">
+                            <p class="alarm-title">Critical Alert</p>
+                            <p class="alarm-message">Very high fire danger! Emergency protocols activated.</p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alarm-container alarm-extreme">
+                        <div class="alarm-icon alarm-pulse-extreme">🚨</div>
+                        <div class="alarm-text">
+                            <p class="alarm-title">Extreme Emergency</p>
+                            <p class="alarm-message">EXTREME FIRE DANGER! All outdoor activities prohibited!</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- FWI Value Display -->
+            <div class="fwi-result-container">
+                <div class="fwi-display">
+                    <div class="fwi-value-box">
+                        <span class="fwi-label">Fire Weather Index (FWI)</span>
+                        <span class="fwi-number">{{ fwi_value }}</span>
+                    </div>
+                </div>
+
+                <!-- Status Card with Dynamic Styling -->
+                <div class="status-card status-{{ status|lower|replace(' ', '-') }}">
+                    <div class="status-header">
+                        <h2 class="status-title">
+                            {% if status == "Low" %}
+                                ✅ Low Risk
+                            {% elif status == "Moderate" %}
+                                ⚠️ Moderate Risk
+                            {% elif status == "High" %}
+                                🔴 High Risk
+                            {% elif status == "Very High" %}
+                                🔴 Very High Risk
+                            {% else %}
+                                🚨 Extreme Risk
+                            {% endif %}
+                        </h2>
+                    </div>
+                    <div class="status-body">
+                        <p class="status-message">{{ message }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safety Recommendations Section -->
+            <div class="recommendations-section">
+                <h3 class="recommendations-title">🛡️ Safety Recommendations</h3>
+                
+                {% if status == "Low" %}
+                    <div class="recommendation-card">
+                        <h4 class="recommendation-header">Low Fire Danger</h4>
+                        <ul class="recommendation-list">
+                            <li>Continue regular fire prevention measures</li>
+                            <li>Monitor weather conditions for changes</li>
+                            <li>Maintain clear vegetation around structures</li>
+                            <li>Keep fire suppression equipment ready</li>
+                        </ul>
+                    </div>
+                {% elif status == "Moderate" %}
+                    <div class="recommendation-card">
+                        <h4 class="recommendation-header">Moderate Fire Danger</h4>
+                        <ul class="recommendation-list">
+                            <li>Increase fire prevention awareness</li>
+                            <li>Restrict open burning activities</li>
+                            <li>Ensure fire suppression equipment is accessible</li>
+                            <li>Monitor weather forecasts closely</li>
+                            <li>Prepare evacuation plans if necessary</li>
+                        </ul>
+                    </div>
+                {% elif status == "High" %}
+                    <div class="recommendation-card">
+                        <h4 class="recommendation-header">High Fire Danger</h4>
+                        <ul class="recommendation-list">
+                            <li>Prohibit all open burning activities</li>
+                            <li>Increase fire watch and patrol activities</li>
+                            <li>Position fire suppression resources strategically</li>
+                            <li>Alert the public to exercise extreme caution</li>
+                            <li>Have evacuation routes clearly marked</li>
+                        </ul>
+                    </div>
+                {% elif status == "Very High" %}
+                    <div class="recommendation-card">
+                        <h4 class="recommendation-header">Very High Fire Danger</h4>
+                        <ul class="recommendation-list">
+                            <li>Implement full fire prevention protocols</li>
+                            <li>Deploy maximum fire suppression resources</li>
+                            <li>Issue public warnings and restrict access to high-risk areas</li>
+                            <li>Activate emergency response teams</li>
+                            <li>Prepare for potential evacuations</li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="recommendation-card">
+                        <h4 class="recommendation-header">Extreme Fire Danger</h4>
+                        <ul class="recommendation-list">
+                            <li>Prohibit all outdoor activities in fire-prone areas</li>
+                            <li>Deploy all available fire suppression resources</li>
+                            <li>Issue emergency alerts to all residents</li>
+                            <li>Implement mandatory evacuation procedures</li>
+                            <li>Close all public lands and parks</li>
+                            <li>Activate emergency management centers</li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- FWI Scale Reference -->
+            <div class="fwi-scale-section">
+                <h3 class="scale-title">📊 FWI Scale Reference</h3>
+                <div class="fwi-scale">
+                    <div class="scale-item scale-low">
+                        <span class="scale-range">0 - 5.2</span>
+                        <span class="scale-label">Low</span>
+                    </div>
+                    <div class="scale-item scale-moderate">
+                        <span class="scale-range">5.2 - 11.2</span>
+                        <span class="scale-label">Moderate</span>
+                    </div>
+                    <div class="scale-item scale-high">
+                        <span class="scale-range">11.2 - 21.3</span>
+                        <span class="scale-label">High</span>
+                    </div>
+                    <div class="scale-item scale-very-high">
+                        <span class="scale-range">21.3 - 38.0</span>
+                        <span class="scale-label">Very High</span>
+                    </div>
+                    <div class="scale-item scale-extreme">
+                        <span class="scale-range">38.0+</span>
+                        <span class="scale-label">Extreme</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="/" class="btn btn-primary">
+                    <span class="btn-icon">🔄</span>
+                    <span class="btn-text">Make Another Prediction</span>
+                </a>
+                <button class="btn btn-secondary" onclick="window.print()">
+                    <span class="btn-icon">🖨️</span>
+                    <span class="btn-text">Print Results</span>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Play alarm sound effect for high-risk scenarios
+        document.addEventListener('DOMContentLoaded', function() {
+            const status = "{{ status }}";
+            
+            // Create and play a simple beep sound for alerts
+            if (status === "Very High" || status === "Extreme") {
+                playAlarmSound();
+            }
+        });
+
+        function playAlarmSound() {
+            // Create an audio context for sound generation
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Set up the alarm sound pattern
+            oscillator.frequency.value = 800; // Frequency in Hz
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+            
+            // Play the alarm twice
+            setTimeout(() => {
+                const osc2 = audioContext.createOscillator();
+                const gain2 = audioContext.createGain();
+                osc2.connect(gain2);
+                gain2.connect(audioContext.destination);
+                osc2.frequency.value = 600;
+                gain2.gain.setValueAtTime(0.3, audioContext.currentTime);
+                osc2.start(audioContext.currentTime);
+                osc2.stop(audioContext.currentTime + 0.2);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
