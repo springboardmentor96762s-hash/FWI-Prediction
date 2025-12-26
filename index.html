@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FWI Prediction Dashboard</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="glass-card">
+    <h1>🔥 Fire Weather Index Predictor</h1>
+    <p class="subtitle">AI-Driven Forest Fire Risk Assessment</p>
+
+    <form method="POST" action="/predict">
+        <div class="grid">
+
+            <div class="input-box">
+                <i class="fa-solid fa-temperature-high"></i>
+                <input name="Temperature" required>
+                <label>Temperature (°C)</label>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-droplet"></i>
+                <input name="RH" required>
+                <label>Relative Humidity (%)</label>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-wind"></i>
+                <input name="Ws" required>
+                <label>Wind Speed (km/h)</label>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-cloud-rain"></i>
+                <input name="Rain" required>
+                <label>Rainfall (mm)</label>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-fire"></i>
+                <input name="FFMC" required>
+                <label>FFMC</label>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-fire-flame-curved"></i>
+                <input name="DMC" required>
+                <label>DMC</label>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-tree"></i>
+                <input name="DC" required>
+                <label>DC</label>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-bolt"></i>
+                <input name="ISI" required>
+                <label>ISI</label>
+            </div>
+
+            <div class="input-box full">
+                <i class="fa-solid fa-chart-area"></i>
+                <input name="BUI" required>
+                <label>BUI</label>
+            </div>
+
+        </div>
+
+        <button class="predict-btn">🚀 Predict FWI</button>
+    </form>
+
+    {% if result %}
+    <div class="result-card {{ risk_class }}">
+        <div class="circle">
+            <span>{{ result }}</span>
+            <small>FWI</small>
+        </div>
+        <div class="risk {{ risk_class }}">
+            🔥 {{ risk }}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
