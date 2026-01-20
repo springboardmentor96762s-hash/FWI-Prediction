@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FWI Predictor — Neon Dashboard</title>
+<style>
+  :root{
+    --bg1:#0f1720; --bg2:#071022;
+    --card:#081226cc;
+    --accent:#ff6b00; --accent2:#ff3d00;
+    --glass-border: rgba(255,255,255,0.06);
+    --glass: rgba(255,255,255,0.03);
+    --text:#e6eef6;
+  }
+  html,body{height:100%; margin:0; font-family:Inter,Segoe UI,Roboto,Helvetica,Arial; background:linear-gradient(135deg,var(--bg1),var(--bg2)); color:var(--text); overflow:hidden}
+  #particles { position:fixed; inset:0; z-index:0; }
+  .wrap{ position:relative; z-index:5; display:flex; gap:30px; align-items:flex-start; justify-content:center; padding:60px 20px; height:100vh; box-sizing:border-box; }
+  .card{ width:480px; background:var(--card); border-radius:16px; padding:28px; box-shadow:0 10px 40px rgba(0,0,0,0.6); border:1px solid var(--glass-border); backdrop-filter:blur(8px); transform:translateY(0); transition:transform .6s cubic-bezier(.2,.9,.3,1); }
+  .card:hover{ transform:translateY(-6px) }
+  h1{ margin:0 0 10px; font-size:22px; letter-spacing:0.6px; color: #fff; display:flex; align-items:center; gap:12px }
+  .logo { width:42px; height:42px; border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:inline-flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(255,107,0,0.18); font-weight:700; color:#fff }
+  p.lead{ margin:8px 0 18px; color:#cfe6ff; font-size:13px }
+  label{ font-size:13px; color:#cfe6ff; display:block; margin:12px 0 6px }
+  input[type="number"]{ width:100%; padding:12px 12px; border-radius:10px; border:1px solid var(--glass-border); background:var(--glass); color:var(--text); font-size:15px; outline:none; }
+  .row{ display:flex; gap:12px }
+  .row .col{ flex:1 }
+  .btn{ margin-top:18px; width:100%; padding:12px; font-size:16px; border-radius:10px; border:none; cursor:pointer; background:linear-gradient(90deg,var(--accent),var(--accent2)); color:white; box-shadow:0 12px 30px rgba(255,107,0,0.14); }
+  .sub { margin-top:10px; font-size:12px; color:#a9c7df; text-align:center }
+  #loaderOverlay{ position:fixed; inset:0; background:rgba(4,7,12,0.75); z-index:60; display:none; align-items:center; justify-content:center; flex-direction:column; }
+  .flame{ width:120px; height:120px; border-radius:50%; background: radial-gradient(circle at 30% 30%, #fff3, transparent 40%); position:relative; box-shadow:0 8px 40px rgba(255,90,0,0.18); display:flex; align-items:center; justify-content:center; }
+  .flame::before, .flame::after { content:""; position:absolute; border-radius:50%; }
+  .flame::before{ width:70px; height:70px; background:linear-gradient(180deg,#ffd69b,#ff8a00); animation:flame1 0.9s infinite; filter: blur(8px); }
+  .flame::after{ width:42px; height:42px; background:linear-gradient(180deg,#fff0 20%, #fff3 30%); animation:flame2 0.8s infinite; opacity:0.9; }
+  @keyframes flame1{ 0%{ transform:translateY(0) scale(1)} 50%{ transform:translateY(-8px) scale(1.05)} 100%{ transform:translateY(0) scale(1)} }
+  @keyframes flame2{ 0%{ transform:translateY(0) scale(1)} 50%{ transform:translateY(-6px) scale(0.95)} 100%{ transform:translateY(0) scale(1)} }
+  .preview { width:520px; padding:26px; border-radius:16px; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.04) }
+  .meter { height:14px; background:rgba(255,255,255,0.08); border-radius:10px; overflow:hidden; margin-top:12px; position:relative }
+  .meter .fill { height:100%; width:0%; background:linear-gradient(90deg,#ffef6b,#ff3d00); transition: width 1.2s ease-out }
+  .danger-text { font-size:20px; margin-top:12px; font-weight:700; letter-spacing:0.6px }
+  footer { position:fixed; bottom:14px; left:0; width:100%; text-align:center; color:#7ea7cc; font-size:13px; z-index:30 }
+  @media(max-width:980px){ .wrap{ flex-direction:column; padding-top:40px } .card, .preview{ width:92% } }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="wrap">
+  <div class="card" role="form" aria-labelledby="title">
+    <h1 id="title"><span class="logo">FW</span> Forest Fire Predictor</h1>
+    <p class="lead">Neon glass UI • Enter the weather features below. Heavy animation & voice alert enabled.</p>
+
+    <!-- FORM: posts to /predict (this matches app.py) -->
+    <form action="/predict" method="post" onsubmit="showLoader();">
+      <label>Temperature</label>
+      <input type="number" name="temperature" step="any" required>
+
+      <div class="row">
+        <div class="col">
+          <label>Relative Humidity (RH)</label>
+          <input type="number" name="humidity" step="any" required>
+        </div>
+        <div class="col">
+          <label>Rain</label>
+          <input type="number" name="rain" step="any" required>
+        </div>
+      </div>
+
+      <label>FFMC</label>
+      <input type="number" name="FFMC" step="any" required>
+
+      <div class="row">
+        <div class="col">
+          <label>DMC</label>
+          <input type="number" name="DMC" step="any" required>
+        </div>
+        <div class="col">
+          <label>DC</label>
+          <input type="number" name="DC" step="any" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>ISI</label>
+          <input type="number" name="ISI" step="any" required>
+        </div>
+        <div class="col">
+          <label>BUI</label>
+          <input type="number" name="BUI" step="any" required>
+        </div>
+      </div>
+
+      <button class="btn" type="submit">Predict FWI</button>
+      <div class="sub">Results include spoken alert and animated visuals</div>
+    </form>
+  </div>
+
+  <div class="preview">
+    <h3 style="margin:0">Live Preview</h3>
+    <p style="margin:6px 0 0; color:#9fc6e8; font-size:13px">Predicted FWI and danger will appear after prediction.</p>
+
+    <div style="margin-top:20px">
+      <div style="display:flex; align-items:center; gap:12px">
+        <div style="width:84px; height:84px; border-radius:12px; background:linear-gradient(135deg,#ff8a00,#ff3d00); box-shadow:0 10px 30px rgba(255,61,0,0.16); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px">FWI</div>
+        <div style="flex:1">
+          <div class="meter"><div class="fill" id="meterFill"></div></div>
+          <div class="danger-text" id="dangerPreview">Awaiting prediction</div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px; display:flex; gap:10px; align-items:center">
+        <div class="flame" aria-hidden="true"></div>
+        <div style="color:#cfe6ff; font-size:13px">Animated flame loader when predicting</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- loader overlay -->
+<div id="loaderOverlay">
+  <div class="flame"></div>
+  <h2 style="color:white; margin-top:18px">Analyzing inputs — generating prediction…</h2>
+</div>
+
+<footer>© FWI Predictor — Neon Dashboard</footer>
+
+<script>
+  function showLoader(){
+    document.getElementById('loaderOverlay').style.display = 'flex';
+  }
+  // optional: hide loader automatically after a timeout (just in case)
+  window.addEventListener('pageshow', ()=>{ document.getElementById('loaderOverlay').style.display = 'none'; });
+</script>
+
+</body>
+</html>
