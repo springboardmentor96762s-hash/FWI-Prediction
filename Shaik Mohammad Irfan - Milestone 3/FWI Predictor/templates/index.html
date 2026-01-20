@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tempest FWI Predictor</title>
+  <style>
+    body {font-family:Arial; background:#fff8f0; padding:20px;}
+    .box {max-width:900px; margin:auto; background:white; padding:30px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1);}
+    h1 {color:#e74c3c; text-align:center;}
+    .grid {display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+    label {display:block; margin:15px 0 5px; font-weight:bold;}
+    input, select {width:100%; padding:12px; border:1px solid #ccc; border-radius:8px;}
+    button {background:#e74c3c; color:white; padding:15px 40px; font-size:18px; border:none; border-radius:8px; cursor:pointer; margin-top:20px;}
+    button:hover {background:#c0392b;}
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1>Tempest FWI Predictor</h1>
+  <p style="text-align:center;color:#7f8c8d;">Enter current weather & fuel conditions</p>
+  <form action="/predict" method="post">
+    <div class="grid">
+      <div>
+        <label>Region</label>
+        <select name="Region"><option value="0">Bejaia</option><option value="1">Sidi-Bel Abbes</option></select>
+
+        <label>Temperature (°C)</label><input type="number" step="0.1" name="Temperature" value="32" required>
+
+        <label>Relative Humidity (%)</label><input type="number" name="RH" value="55" required>
+
+        <label>Wind Speed (km/h)</label><input type="number" step="0.1" name="Ws" value="15" required>
+
+        <label>Rain (mm)</label><input type="number" step="0.1" name="Rain" value="0" required>
+      </div>
+      <div>
+        <label>FFMC</label><input type="number" step="0.1" name="FFMC" value="88" required>
+        <label>DMC</label><input type="number" step="0.1" name="DMC" value="25" required>
+        <label>DC</label><input type="number" step="0.1" name="DC" value="150" required>
+        <label>ISI</label><input type="number" step="0.1" name="ISI" value="9" required>
+        <label>BUI</label><input type="number" step="0.1" name="BUI" value="30" required>
+      </div>
+    </div>
+    <center><button type="submit">Predict FWI</button></center>
+  </form>
+</div>
+</body>
+</html>
