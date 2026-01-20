@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FWI Prediction</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f3f7ff; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background: #ffffff;
+        padding: 30px 35px;
+        border-radius: 14px;
+        width: 540px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.12);
+        border-top: 6px solid #a8c8ff;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #3e5f8a;
+        font-weight: bold;
+    }
+
+  
+    .mode-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 22px;
+    }
+
+    .mode-buttons button {
+        width: 48%;
+        padding: 12px;
+        font-size: 15px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        background: #eaf0ff;
+    }
+
+    .mode-buttons button.active {
+        background: #8eb4ff;
+        color: white;
+        font-weight: bold;
+    }
+
+    
+    .row {
+        display: flex;
+        gap: 22px; 
+        margin-bottom: 20px;
+    }
+
+    .row > div {
+        flex: 1;
+    }
+
+    label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 6px;
+        display: block;
+        color: #444;
+    }
+
+    select, input {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+        border-radius: 8px;
+        border: 1px solid #bcd4ff;
+        background: #eef4ff;
+    }
+
+    input.manual-input {
+    background: #ffffff;
+    padding: 6px 8px;   
+    font-size: 13px;   
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+
+    .submit-btn {
+        width: 100%;
+        padding: 14px;
+        background: #99d9b4; 
+        font-size: 17px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+        background: #87c9a3;
+    }
+
+    .result {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: #3e5f8a;
+    }
+    .result {
+    margin-top: 25px;
+    padding: 18px;
+    background: #e9f9f2;  
+    border-radius: 12px;
+    text-align: center;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+.result h2 {
+    color: #1d6b49;
+    margin-bottom: 8px;
+}
+
+.result h3 {
+    color: #254b8c;
+    margin-top: 0;
+}
+
+</style>
+
+<script>
+function switchMode(mode) {
+    const selectFields = document.querySelectorAll(".select-input");
+    const manualFields = document.querySelectorAll(".manual-input");
+
+    if (mode === 'select') {
+        selectFields.forEach(el => {
+            el.style.display = 'block';
+            el.disabled = false;    
+        });
+
+        manualFields.forEach(el => {
+            el.style.display = 'none';
+            el.disabled = true;      
+        });
+
+        document.getElementById("selectBtn").classList.add("active");
+        document.getElementById("manualBtn").classList.remove("active");
+
+    } else {
+        selectFields.forEach(el => {
+            el.style.display = 'none';
+            el.disabled = true;      
+        });
+
+        manualFields.forEach(el => {
+            el.style.display = 'block';
+            el.disabled = false;    
+        });
+
+        document.getElementById("manualBtn").classList.add("active");
+        document.getElementById("selectBtn").classList.remove("active");
+    }
+}
+</script>
+
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>FWI Prediction</h2>
+
+    
+    <div class="mode-buttons">
+        <button id="selectBtn" class="active" onclick="switchMode('select')">Selection Mode</button>
+        <button id="manualBtn" onclick="switchMode('manual')">Manual Entry</button>
+    </div>
+
+    <form action="/predict" method="POST">
+
+        <div class="row">
+            <div>
+                <label>Month</label>
+
+                <select class="select-input" name="month" required>
+                    <option value="">Select</option>
+                    {% for m in range(1,13) %}
+                    <option value="{{m}}">{{m}}</option>
+                    {% endfor %}
+                </select>
+
+                <input class="manual-input" type="number" name="month" min="1" max="12" placeholder="Month" style="display:none;">
+            </div>
+
+            <div>
+                <label>Day</label>
+
+                <select class="select-input" name="day" required>
+                    <option value="">Select</option>
+                    {% for d in range(1,32) %}
+                    <option value="{{d}}">{{d}}</option>
+                    {% endfor %}
+                </select>
+
+                <input class="manual-input" type="number" name="day" min="1" max="31" placeholder="Day" style="display:none;">
+            </div>
+        </div>
+
+        
+        <div class="row">
+            <div>
+                <label>FFMC</label>
+                <select class="select-input" name="ffmc" required>
+                    <option value="">Select</option>
+                    {% for v in range(1,150) %}
+                    <option value="{{v}}">{{v}}</option>
+                    {% endfor %}
+                </select>
+
+                <input class="manual-input" type="number" name="ffmc" placeholder="FFMC" style="display:none;">
+            </div>
+
+            <div>
+                <label>DMC</label>
+                <select class="select-input" name="dmc" required>
+                    <option value="">Select</option>
+                    {% for v in range(1,200) %}
+                    <option value="{{v}}">{{v}}</option>
+                    {% endfor %}
+                </select>
+
+                <input class="manual-input" type="number" name="dmc" placeholder="DMC" style="display:none;">
+            </div>
+
+            <div>
+                <label>DC</label>
+                <select class="select-input" name="dc" required>
+                    <option value="">Select</option>
+                    {% for v in range(1,250) %}
+                    <option value="{{v}}">{{v}}</option>
+                    {% endfor %}
+                </select>
+
+                <input class="manual-input" type="number" name="dc" placeholder="DC" style="display:none;">
+            </div>
+
+            <div>
+                <label>ISI</label>
+                <select class="select-input" name="isi" required>
+                    <option value="">Select</option>
+                    {% for v in range(1,50) %}
+                    <option value="{{v}}">{{v}}</option>
+                    {% endfor %}
+                </select>
+
+                <input class="manual-input" type="number" name="isi" placeholder="ISI" style="display:none;">
+            </div>
+        </div>
+
+        
+        <div class="row">
+            <div>
+                <label>Temperature (°C)</label>
+                <select class="select-input" name="temp" required>
+                    <option value="">Select</option>
+                    {% for v in range(-5,50) %}
+                    <option value="{{v}}">{{v}} °C</option>
+                    {% endfor %}
+                </select>
+
+                <input class="manual-input" type="number" name="temp" placeholder="Temperature" style="display:none;">
+            </div>
+
+            <div>
+                <label>Wind (km/h)</label>
+                <select class="select-input" name="wind" required>
+                    <option value="">Select</option>
+                    {% for v in range(0,40) %}
+                    <option value="{{v}}">{{v}} km/h</option>
+                    {% endfor %}
+                </select>
+
+                <input class="manual-input" type="number" name="wind" placeholder="Wind Speed" style="display:none;">
+            </div>
+
+            <div>
+                <label>BUI</label>
+                <select class="select-input" name="bui" required>
+                    <option value="">Select</option>
+                    {% for v in range(1,200) %}
+                    <option value="{{v}}">{{v}}</option>
+                    {% endfor %}
+                </select>
+
+                <input class="manual-input" type="number" name="bui" placeholder="BUI" style="display:none;">
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Predict FWI</button>
+
+    </form>
+
+    {% if prediction_text %}
+    <div class="result">{{ prediction_text }}</div>
+    {% endif %}
+    {% if prediction %}
+<div class="result">
+    <h2>FWI Value: {{ prediction }}</h2>
+    <h3>Risk Level: {{ risk }}</h3>
+</div>
+{% endif %}
+
+
+</div>
+
+</body>
+</html>

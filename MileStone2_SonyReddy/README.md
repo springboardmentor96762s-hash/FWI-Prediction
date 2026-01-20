@@ -1,0 +1,3 @@
+I have taken the same dataset which i have previously used.
+In this we use linear regression,ridge regression and lasso regression.
+Splitting the dataset for testing and training and then fitting the model and plotting the graphs and finding all the metrics like mean squared error,mean absolute error,root mean square and evaluating the model using all these whether it is overfitting(high training and low testing) and underfitting(low training and low testing)
