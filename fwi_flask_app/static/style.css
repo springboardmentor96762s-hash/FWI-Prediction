@@ -1,0 +1,107 @@
+/* Universal Settings */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Poppins, Arial, sans-serif;
+  height: 100%;
+}
+
+/* --- INDEX PAGE (FORM) --- */
+body.index-page {
+  background: linear-gradient(to right, #ffecd2, #fcb69f);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  width: 400px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
+}
+
+h2 {
+  text-align: center;
+  color: #d9534f;
+  margin-bottom: 20px;
+}
+
+/* --- RESULT PAGE --- */
+body.result-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  height: 100vh;
+  transition: background 1s ease-in-out;
+}
+
+/* Backgrounds by Risk */
+body.no-risk {
+  background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=80')
+  no-repeat center/cover;
+}
+
+body.moderate {
+  background: url('https://images.unsplash.com/photo-1501973801540-537f08ccae7b?auto=format&fit=crop&w=1000&q=80')
+  no-repeat center/cover;
+}
+
+body.high {
+  background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1000&q=80')
+  no-repeat center/cover;
+}
+
+body.extreme {
+  background: url('https://images.unsplash.com/photo-1507919981828-9455323ee4d2?auto=format&fit=crop&w=1000&q=80')
+  no-repeat center/cover;
+}
+
+/* Result Card */
+.result-card {
+  background: rgba(0,0,0,0.6);
+  padding: 30px;
+  border-radius: 20px;
+  width: 380px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+/* Meter */
+.meter-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: auto;
+}
+
+.meter {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: conic-gradient(#fff 0deg, #fff 0deg);
+}
+
+.meter-value {
+  position: absolute;
+  top: 74px;
+  left: 85px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+/* Button */
+.btn {
+  margin-top: 25px;
+  background: #ffcc00;
+  padding: 12px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.btn:hover {
+  background: #ffe680;
+}

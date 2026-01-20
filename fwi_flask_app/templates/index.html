@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FWI Predictor</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+    /* Animated gradient background */
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #ffecd2, #fcb69f, #ff6b6b, #fca3b7);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+        0% {background-position: 0% 50%;}
+        50% {background-position: 100% 50%;}
+        100% {background-position: 0% 50%;}
+    }
+
+    /* Glassmorphic card */
+    .card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+        border-radius: 25px;
+        padding: 40px 30px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.3);
+        transition: transform 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    h2 {
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    h2::before {
+        content: "🔥";
+        font-size: 30px;
+    }
+
+    /* Glassmorphic input boxes */
+    .form-floating>.form-control {
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.3);
+        padding: 20px 15px 10px 15px;
+        font-size: 16px;
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        backdrop-filter: blur(5px);
+        box-shadow: inset 0 0 5px rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .form-floating>.form-control:focus {
+        border-color: #ff6b6b;
+        box-shadow: 0 0 10px rgba(255,107,107,0.5);
+        background: rgba(255,255,255,0.15);
+    }
+
+    label {
+        color: rgba(255,255,255,0.7);
+        pointer-events: none;
+        transition: 0.3s ease all;
+    }
+
+    .form-floating>.form-control:focus~label,
+    .form-floating>.form-control:not(:placeholder-shown)~label {
+        opacity: 0.8;
+        transform: translateY(-28px) scale(0.9);
+        color: #ff6b6b;
+    }
+
+    /* Button style */
+    .btn-predict {
+        margin-top: 20px;
+        width: 100%;
+        padding: 14px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        background: linear-gradient(45deg, #ff6b6b, #ff3b3b);
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+
+    .btn-predict:hover {
+        background: linear-gradient(45deg, #ff3b3b, #ff6b6b);
+        transform: scale(1.05);
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Fire Weather Index Predictor</h2>
+    <form action="/predict" method="post">
+        {% for feature in features %}
+            <div class="form-floating mb-3">
+                <input type="number" step="any" name="{{ feature }}" class="form-control" placeholder=" " required>
+                <label>{{ feature }}</label>
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn-predict">Predict FWI</button>
+    </form>
+</div>
+
+</body>
+</html>

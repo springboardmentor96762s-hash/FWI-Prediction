@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FWI Result</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Poppins, sans-serif;
+            color: white;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain; /* <-- fits image without zoom */
+            transition: background 1s ease-in-out;
+        }
+
+        .card {
+            background: rgba(0,0,0,0.55);
+            padding: 30px;
+            width: 400px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        /* FIRE SYMBOLS */
+        .fire-meter {
+            font-size: 30px;
+            margin: 20px 0;
+        }
+
+        .fire-symbol {
+            opacity: 0.3; /* unlit fire */
+            transition: opacity 0.5s;
+        }
+
+        .fire-symbol.active {
+            opacity: 1; /* lit fire */
+        }
+
+        .btn {
+            background: #ffcc00;
+            padding: 10px 18px;
+            font-weight: 600;
+            color: black;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body id="bg">
+
+    <div class="card">
+        <h1>🔥 Fire Weather Index</h1>
+
+        <h2>FWI: {{ prediction }}</h2>
+        <h2>Risk: {{ risk }}</h2>
+
+        <!-- Fire Symbols -->
+        <div class="fire-meter">
+            <span class="fire-symbol" id="fire1">🔥</span>
+            <span class="fire-symbol" id="fire2">🔥</span>
+            <span class="fire-symbol" id="fire3">🔥</span>
+            <span class="fire-symbol" id="fire4">🔥</span>
+        </div>
+
+        <form action="/">
+            <button class="btn">Predict Again</button>
+        </form>
+    </div>
+
+<script>
+    let fwi = {{ prediction }};
+    let risk = "{{ risk }}";
+
+    // --- BACKGROUND IMAGES FROM STATIC FOLDER ---
+    let bg = document.getElementById("bg");
+    if (risk.includes("No Risk")) bg.style.backgroundImage = "url('/static/1.jpg')";
+    else if (risk.includes("Moderate")) bg.style.backgroundImage = "url('/static/2.jpg')";
+    else if (risk.includes("High")) bg.style.backgroundImage = "url('/static/3.jpg')";
+    else if (risk.includes("Extreme")) bg.style.backgroundImage = "url('/static/4.jpg')";
+
+    // --- FIRE SYMBOL ACTIVATION ---
+    const fires = [
+        document.getElementById("fire1"),
+        document.getElementById("fire2"),
+        document.getElementById("fire3"),
+        document.getElementById("fire4")
+    ];
+
+    let activeCount = 0;
+    if (risk.includes("Moderate")) activeCount = 1;
+    else if (risk.includes("High")) activeCount = 2;
+    else if (risk.includes("Extreme")) activeCount = 4;
+
+    for(let i=0; i<activeCount; i++){
+        fires[i].classList.add("active");
+    }
+</script>
+
+</body>
+</html>
