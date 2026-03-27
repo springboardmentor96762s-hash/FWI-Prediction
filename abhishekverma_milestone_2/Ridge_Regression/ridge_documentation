@@ -1,0 +1,125 @@
+
+Ridge Regression Model -
+
+1. Introduction
+This project implements a Ridge Regression model to predict the Forest Fire Weather Index (FWI) based on meteorological variables. The purpose of building this model is to develop a reliable method for estimating fire risk using weather-based predictors.
+Traditional linear regression often suffers from:
+•	Overfitting
+•	Sensitivity to noise
+•	Multicollinearity among predictors (common in weather data)
+
+To overcome these issues, Ridge Regression adds an L2 regularization term to the loss function. This reduces the magnitude of coefficients, stabilizes the model, and improves generalization on unseen data.
+
+Ridge Regression was chosen because:
+•	It handles multicollinearity effectively
+•	It prevents coefficients from becoming excessively large
+•	It improves prediction accuracy on real-world noisy weather data
+•	It provides smoother and more stable solutions than standard linear regression
+The final goal is to build a robust, regularized regression model that predicts FWI accurately and remains stable across varying fire weather conditions.
+
+2. Preprocessing Summary
+
+The dataset used for this model was already cleaned and encoded. The following preparation steps were performed:
+1.	Defined feature matrix X by removing the target column FWI.
+2.	Defined target vector y as FWI.
+3.	Scaled features using StandardScaler to standardize variables, which helps regularized regression converge faster.
+4.	Saved the fitted scaler as scaler.pkl for future use.
+5.	Created an 80-20 train-test split to evaluate generalization performance.
+
+3. Ridge Regression Model
+
+Ridge Regression is a modified form of linear regression that adds an L2 penalty to the loss function:
+                                   Loss=∥y-y^∥2+α∥w∥2
+Where:
+•	α controls the amount of regularization
+•	∥w∥² prevents coefficients from becoming too large
+•	Higher α→ stronger regularization
+
+This approach is ideal for FWI prediction because meteorological features often correlate with each other (e.g., humidity, temperature, wind). Ridge stabilizes the solution and prevents coefficient explosion.
+
+Hyperparameter Tuning
+The model was trained using the following regularization strengths:
+[0.001, 0.01, 0.1, 1, 10, 100, 200]
+Evaluation Metrics Used
+•	Mean Squared Error (MSE)
+•	Root Mean Squared Error (RMSE)
+•	Mean Absolute Error (MAE)
+•	R² Score
+
+4. Visualizations
+
+The modeling process included analytical plots to understand the effect of α and model performance:
+•	Alpha vs MSE
+•	Alpha vs RMSE
+•	Alpha vs MAE
+•	Alpha vs R² Score
+•	Actual vs Predicted FWI
+
+5. Best Alpha Selection
+
+The optimal alpha value was selected based on lowest Test MSE:
+Result obtained:
+Best Alpha = 0.01
+This alpha provided the most balanced bias–variance trade-off.
+
+6. Final Model Results
+
+Performance metrics for Best Alpha = 0.01:
+Metric	Train	Test
+MSE	0.00450	0.00628
+RMSE 0.067	0.078
+MAE	0.053	0.067
+R² Score 0.99954	0.99934
+
+Interpretation of Results
+•	Training and testing errors are nearly identical → excellent generalization
+•	Very high R² scores → strong fit with minimal variance
+•	The model is stable and free from overfitting due to effective L2 regularization
+
+Overfitting/Underfitting Check:
+•	Differences between Train MSE and Test MSE were analyzed.
+•	All alpha values indicated good fit, confirming stable performance across regularization strengths.
+
+7. Model Metrics Table
+
+A summary table containing metrics for all alpha values was created to analyze performance across different regularization strengths:
+Alpha	Train MSE	Test MSE	Train RMSE	Test RMSE	Train MAE	Test MAE	Train R²	Test R²
+0.001	0.004444	0.006280	0.066667	0.079244	0.051540	0.067186	0.999555	0.999341
+0.01	0.004506	0.006237	0.067128	0.078974	0.053221	0.067473	0.999549	0.999345
+0.1	    0.006976	0.007536	0.083524	0.086808	0.066502	0.069279	0.999302	0.999209
+1.0	    0.020310	0.020051	0.142513	0.141601	0.099442	0.086511	0.997969	0.997896
+10.0	0.044952	0.043804	0.212020	0.209295	0.173814	0.175421	0.995504	0.995403
+100.0	0.168569	0.133519	0.410571	0.365402	0.320241	0.277690	0.983141	0.985987
+200.0	0.316688	0.259187	0.562750	0.509104	0.456688	0.404280	0.968326	0.972797
+This helps visualize the bias–variance trade-off across alpha values.
+
+8. Model Saving
+
+The best-performing Ridge model was saved as:
+ridge.pkl
+Additionally, the StandardScaler used to scale features was saved as:
+scaler.pkl
+
+9. How to Execute the Model
+
+Run the script:
+python Ridge_Model.py
+
+This will perform the following:
+
+•	Load and scale features
+•	Train Ridge models for all alpha values
+•	Generate evaluation metrics and plots
+•	Save the best Ridge model and scaler
+
+10. Conclusion
+
+This project successfully implemented a Ridge Regression model with L2 regularization to predict the Forest Fire Weather Index. 
+The workflow included:
+
+•	Feature scaling and train-test splitting
+•	Hyperparameter tuning and model evaluation
+•	Visualizations and overfitting/underfitting diagnosis
+•	Model persistence (Ridge model + scaler)
+
+The resulting model demonstrated strong accuracy, minimal error values, and robust performance across training and testing sets, making it reliable for predicting FWI from weather-based predictors.
