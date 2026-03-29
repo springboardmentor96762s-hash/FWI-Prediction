@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FWI Prediction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: #020617;
+            padding: 24px 28px;
+            border-radius: 14px;
+            box-shadow: 0 18px 40px rgba(15,23,42,0.9);
+            width: 420px;
+            border: 1px solid #334155;
+        }
+        h1 {
+            font-size: 20px;
+            margin: 0 0 4px;
+            color: #f9fafb;
+        }
+        p.subtitle {
+            font-size: 13px;
+            margin: 0 0 16px;
+            color: #9ca3af;
+        }
+        .field-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px 14px;
+            margin-bottom: 14px;
+        }
+        label {
+            font-size: 13px;
+            color: #e5e7eb;
+            display: block;
+            margin-bottom: 4px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 7px 8px;
+            border-radius: 8px;
+            border: 1px solid #4b5563;
+            background: #020617;
+            color: #f9fafb;
+            font-size: 13px;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #22c55e;
+            box-shadow: 0 0 0 1px rgba(34,197,94,0.3);
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        button {
+            width: 100%;
+            padding: 9px 0;
+            margin-top: 4px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #022c22;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.06s ease-out, box-shadow 0.06s ease-out;
+            box-shadow: 0 10px 25px rgba(22,163,74,0.45);
+        }
+        button:hover { transform: translateY(-1px); box-shadow: 0 14px 30px rgba(22,163,74,0.55); }
+        button:active { transform: translateY(0); box-shadow: 0 6px 18px rgba(22,163,74,0.45); }
+
+        .alert {
+            background:#f97373;
+            color:#111827;
+            padding:6px 10px;
+            border-radius:8px;
+            font-size:12px;
+            margin-bottom:8px;
+        }
+        .note {
+            font-size: 11px;
+            color:#9ca3af;
+            margin-top:6px;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Fire Weather Index (FWI)</h1>
+    <p class="subtitle">Enter today’s weather conditions to estimate fire danger.</p>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert">
+            {{ messages[0] }}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form action="/predict" method="post">
+        <div class="field-group">
+            <div>
+                <label for="Temperature">Temperature (°C)</label>
+                <input type="number" step="any" name="Temperature" id="Temperature" required>
+            </div>
+            <div>
+                <label for="RH">Relative Humidity (%)</label>
+                <input type="number" step="any" name="RH" id="RH" required>
+            </div>
+            <div>
+                <label for="Ws">Wind Speed (km/h)</label>
+                <input type="number" step="any" name="Ws" id="Ws" required>
+            </div>
+            <div>
+                <label for="Rain">Rain (mm)</label>
+                <input type="number" step="any" name="Rain" id="Rain" required>
+            </div>
+            <div>
+                <label for="DMC">DMC</label>
+                <input type="number" step="any" name="DMC" id="DMC" required>
+            </div>
+            <div>
+                <label for="DC">DC</label>
+                <input type="number" step="any" name="DC" id="DC" required>
+            </div>
+            <div>
+                <label for="ISI">ISI</label>
+                <input type="number" step="any" name="ISI" id="ISI" required>
+            </div>
+            <div>
+                <label for="BUI">BUI</label>
+                <input type="number" step="any" name="BUI" id="BUI" required>
+            </div>
+            <div class="full-width">
+                <label for="FFMC">FFMC</label>
+                <input type="number" step="any" name="FFMC" id="FFMC" required>
+            </div>
+        </div>
+
+        <button type="submit">Predict Fire Weather Index</button>
+        <p class="note">Model: Ridge Regression with optimized alpha, trained on Bejaia Region FWI dataset.</p>
+    </form>
+</div>
+</body>
+</html>

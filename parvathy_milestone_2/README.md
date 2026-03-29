@@ -1,0 +1,3 @@
+This project predicts FWI using the cleaned Bejaia Region dataset. The numeric features (Temperature, RH, Ws, Rain, DMC, DC, ISI, BUI, FFMC) are used as inputs, and FWI is the target, with an 80/20 train–test split.​
+A LinearRegression model is trained and evaluated using MAE, MSE, and R², achieving very high test performance (R² ≈ 0.985). Ridge regression is then applied with different alpha values (0.1, 0.2, 1, 2, 5, 10); for each alpha, train and test MSE, MAE, and R² are computed and plotted to check over/underfitting.​
+The best alpha is chosen around 0.1 based on lowest test MSE and highest test R², and the final Ridge model is saved as a pickle file (fwi_ridge_model.pkl) for later use without retraining.​
