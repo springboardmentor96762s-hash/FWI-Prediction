@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FWI Prediction</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 40px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* 🔥 FULLSCREEN BACKGROUND VIDEO */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(0.45);
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: rgba(255,255,255,0.92);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            border-top: 6px solid #ff4500;
+            position: relative;
+        }
+
+        .decor-img {
+            width: 70px;
+            position: absolute;
+            top: -35px;
+            left: -35px;
+            transform: rotate(-10deg);
+        }
+
+        .fire-img {
+            width: 90px;
+            position: absolute;
+            top: -35px;
+            right: -20px;
+        }
+
+        .bottom-left-img {
+            width: 80px;
+            position: absolute;
+            bottom: -25px;
+            left: -25px;
+            transform: rotate(10deg);
+        }
+
+        .bottom-right-img {
+            width: 80px;
+            position: absolute;
+            bottom: -25px;
+            right: -25px;
+            transform: rotate(-10deg);
+        }
+
+        h2 {
+            text-align: center;
+            color: #d35400;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+    
+
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: #e74c3c;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .result {
+            background: #2c3e50;
+            padding: 15px;
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<video autoplay loop muted playsinline id="bg-video">
+    <source src="{{ url_for('static', filename='fire.mp4') }}" type="video/mp4">
+</video>
+
+<div class="container">
+
+    <!-- Decorative Images -->
+    <img class="decor-img" src="https://cdn-icons-png.flaticon.com/128/11327/11327146.png">
+    <img class="fire-img" src="https://cdn-icons-png.flaticon.com/128/1973/1973044.png">
+    <img class="bottom-left-img" src="https://cdn-icons-png.flaticon.com/128/10473/10473357.png">
+    <img class="bottom-right-img" src="https://cdn-icons-png.flaticon.com/128/7484/7484602.png">
+
+    <h2>🔥 FWI Prediction</h2>
+
+    <form method="POST">
+
+        <h4>Meteorological Data</h4>
+        <div class="grid">
+            <input type="number" name="temperature" step="any" placeholder="Temperature °C" required>
+            <input type="number" name="rh" step="any" placeholder="Relative Humidity %" required>
+            <input type="number" name="ws" step="any" placeholder="Wind Speed km/h" required>
+            <input type="number" name="rain" step="any" placeholder="Rain mm" required>
+        </div>
+
+        <h4>FWI Sub-indices</h4>
+        <div class="grid">
+            <input type="number" name="ffmc" step="any" placeholder="FFMC" required>
+            <input type="number" name="dmc" step="any" placeholder="DMC" required>
+            <input type="number" name="dc" step="any" placeholder="DC" required>
+            <input type="number" name="isi" step="any" placeholder="ISI" required>
+            <input type="number" name="bui" step="any" placeholder="BUI" required>
+        </div>
+
+        <button type="submit">Predict FWI</button>
+    </form>
+
+    {% if output %}
+    <div class="result">
+        Predicted FWI Score: {{ output }}
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

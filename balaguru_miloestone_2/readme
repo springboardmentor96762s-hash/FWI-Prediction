@@ -1,0 +1,87 @@
+1)Ridge Regression Model Training, Evaluation and Hyperparameter Tuning
+
+This project trains a Ridge Regression model to handle multicollinearity, evaluates its performance using multiple metrics, and tunes the regularization parameter alpha to find the optimal model.
+
+2)Project Features
+
+2.1)Module 4: Model Training – Ridge Regression
+- Trained a Ridge Regression model to reduce variance and handle multicollinearity.
+- Performed hyperparameter tuning on the alpha value.
+- Checked bias–variance tradeoff by visualizing model performance.
+- Saved the trained model as ridge.pkl using pickle.
+- Documented the training process and parameters used.
+
+2.2)Module 5: Evaluation & Optimization
+- Evaluated the model using:
+  - Mean Absolute Error (MAE)
+  - Mean Squared Error (MSE)
+  - Root Mean Squared Error (RMSE)
+  - R² Score
+- Plotted:
+  - Predicted vs Actual values
+  - Train MSE vs Alpha
+  - Train RMSE vs Alpha
+  - Train MAE vs Alpha
+- Identified underfitting/overfitting based on learning patterns.
+- Selected optimal alpha that gives the best accuracy.
+
+3)Hyperparameter Tuning – Alpha
+
+The following metrics were tracked across multiple values of alpha:
+
+- MSE (Train)
+- RMSE (Train)
+- MAE (Train)
+
+The optimal alpha is the one that provides:
+
+✔ Low MSE  
+✔ Low RMSE  
+✔ Low MAE  
+✔ High R² score  
+✔ Balanced train vs test performance  
+
+4)Output Files
+_______________________________________________________
+| File               | Description                    |
+|--------------------|--------------------------------|
+|  ridge.pkl         | Saved Ridge model using pickle |
+|  mse_vs_alpha.png  | Train MSE vs Alpha plot        |
+|  rmse_vs_alpha.png | RMSE vs Alpha plot             |
+|  mae_vs_alpha.png  | MAE vs Alpha plot              |
+|  pred_vs_actual.png| Predictions comparison plot   |
+|_____________________________________________________|
+
+
+5)Evaluation Metrics Used
+---------------------------------------------
+| Metric     | Description                   |
+|------------|-------------------------------|
+| MAE        | Average absolute error        |
+| MSE        | Penalizes large errors highly |
+| RMSE       | Square root of MSE            |
+| R² Score   | Measures variance explained   |
+----------------------------------------------
+
+6) Underfitting & Overfitting Check
+
+- Underfitting → High train error + high test error  
+- Overfitting  → Low train error + high test error  
+- Good Fit → Train and test errors are similar  
+  (best model chosen using optimal alpha)
+
+7)Technologies Used
+
+- Python  
+- NumPy  
+- Pandas  
+- Scikit-learn  
+- Matplotlib  
+- Pickle
+
+8)Full Project Code
+
+All code is included inside the folder of this project:
+-  ridge.py
+-  ridge_model.pkl
+
