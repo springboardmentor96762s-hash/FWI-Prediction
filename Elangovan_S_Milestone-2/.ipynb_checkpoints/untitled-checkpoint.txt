@@ -1,0 +1,5 @@
+dataset-features,preprocessing
+dataset statistics-plotting like histo,correlation
+models-ridge regression,alpha param,mse,mae
+flask application-flask app and backend integration
+app presentation -1min(for high ,low and mid level fwi values) 

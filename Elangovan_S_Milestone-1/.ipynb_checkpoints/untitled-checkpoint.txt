@@ -1,0 +1,24 @@
+https://chat.whatsapp.com/CNjhI2rwaZbL8PBd332smK?mode=wwt
+Module 4: Model Training using Ridge Regression
+• Trained a Ridge Regression model to handle multicollinearity in input data.
+• Tuned the alpha parameter to balance bias-variance tradeoff.
+• Evaluated training and validation performance during training.
+• Saved the trained model using pickle as ridge.pkl.
+• Documented the training process and parameters used.
+Module 5: Evaluation and Optimization
+• Evaluated the model using Mean Absolute Error (MAE).
+• Computed Root Mean Squared Error (RMSE) to penalize large errors.
+• Calculated R2 Score to assess variance explanation.
+• Plotted predicted vs actual values to visualize performance.
+• Tuned model parameters (alpha) and retrained if needed to improve metrics.
+
+In a rigde expression I need to see MSE against the  RMSE, MAE  against the different values of alpha
+
+The optimal value of alpha is the one that gives the best train and test accuracy
+
+I want everyone to complete the task by Thursday.
+
+mse_train,
+mse_test,
+
+check wheteher it is underfittung or overfitting with rigde regression

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FWI Prediction Result</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container {
+        max-width: 700px;
+        width: 100%;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+
+      .result-container {
+        padding: 40px;
+      }
+
+      .prediction-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .prediction-label {
+        font-size: 1.2em;
+        opacity: 0.9;
+        margin-bottom: 10px;
+      }
+
+      .prediction-value {
+        font-size: 3.5em;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      .prediction-description {
+        font-size: 1em;
+        opacity: 0.85;
+      }
+
+      .input-details {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+      }
+
+      .input-details h3 {
+        color: #667eea;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+      }
+
+      .details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .detail-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background: white;
+        border-radius: 6px;
+        border-left: 3px solid #667eea;
+      }
+
+      .detail-label {
+        font-weight: 600;
+        color: #333;
+      }
+
+      .detail-value {
+        color: #666;
+        font-weight: 500;
+      }
+
+      .btn-container {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-secondary {
+        background: #e0e0e0;
+        color: #333;
+      }
+
+      .btn-secondary:hover {
+        background: #d0d0d0;
+      }
+
+      .fire-danger {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .danger-low {
+        background: #d4edda;
+        color: #155724;
+        border: 2px solid #c3e6cb;
+      }
+
+      .danger-moderate {
+        background: #fff3cd;
+        color: #856404;
+        border: 2px solid #ffeeba;
+      }
+
+      .danger-high {
+        background: #f8d7da;
+        color: #721c24;
+        border: 2px solid #f5c6cb;
+      }
+
+      .danger-extreme {
+        background: #d6d8d9;
+        color: #1b1e21;
+        border: 2px solid #c6c8ca;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🔥 Prediction Result</h1>
+      </div>
+
+      <div class="result-container">
+        <div class="prediction-box">
+          <div class="prediction-label">Fire Weather Index (FWI)</div>
+          <div class="prediction-value">{{ "%.2f"|format(prediction) }}</div>
+          <div class="prediction-description">
+            Predicted using Ridge Regression Model
+          </div>
+        </div>
+
+        {% set fwi = prediction %} {% if fwi < 5 %}
+        <div class="fire-danger danger-low">
+          ✓ Low Fire Danger - FWI below 5
+        </div>
+        {% elif fwi < 15 %}
+        <div class="fire-danger danger-moderate">
+          ⚠ Moderate Fire Danger - FWI between 5 and 15
+        </div>
+        {% elif fwi < 30 %}
+        <div class="fire-danger danger-high">
+          ⚠⚠ High Fire Danger - FWI between 15 and 30
+        </div>
+        {% else %}
+        <div class="fire-danger danger-extreme">
+          ⚠⚠⚠ Extreme Fire Danger - FWI above 30
+        </div>
+        {% endif %}
+
+        <div class="input-details">
+          <h3>Input Parameters</h3>
+          <div class="details-grid">
+            {% for key, value in features.items() %}
+            <div class="detail-item">
+              <span class="detail-label">{{ key }}:</span>
+              <span class="detail-value"
+                >{{ "%.2f"|format(value) if value is number else value }}</span
+              >
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <a href="/" class="btn btn-primary">New Prediction</a>
+          <button onclick="window.print()" class="btn btn-secondary">
+            Print Result
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FWI Prediction System</title>
+    <style>
+      :root {
+        --bg-gradient-start: #667eea;
+        --bg-gradient-end: #764ba2;
+        --container-bg: #ffffff;
+        --text-primary: #333333;
+        --text-secondary: #666666;
+        --input-bg: #f8f9fa;
+        --border-color: #667eea;
+        --shadow-color: rgba(0, 0, 0, 0.3);
+      }
+
+      body.dark-mode {
+        --bg-gradient-start: #1a1a2e;
+        --bg-gradient-end: #16213e;
+        --container-bg: #0f3460;
+        --text-primary: #e0e0e0;
+        --text-secondary: #b0b0b0;
+        --input-bg: #1a1a2e;
+        --border-color: #e94560;
+        --shadow-color: rgba(0, 0, 0, 0.7);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          var(--bg-gradient-start) 0%,
+          var(--bg-gradient-end) 100%
+        );
+        min-height: 100vh;
+        padding: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--container-bg);
+        border-radius: 15px;
+        box-shadow: 0 20px 60px var(--shadow-color);
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .header {
+        background: linear-gradient(
+          135deg,
+          var(--bg-gradient-start) 0%,
+          var(--bg-gradient-end) 100%
+        );
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+      }
+
+      .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50px;
+        padding: 10px 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .theme-toggle:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+      }
+
+      .theme-toggle-icon {
+        font-size: 1.5em;
+      }
+
+      .theme-toggle-text {
+        font-size: 0.9em;
+        font-weight: 600;
+        color: white;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.1em;
+        opacity: 0.9;
+      }
+
+      .form-container {
+        padding: 40px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-group label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-primary);
+        font-size: 0.95em;
+        transition: all 0.3s ease;
+      }
+
+      .form-group small {
+        color: var(--text-secondary);
+        font-size: 0.85em;
+        margin-top: 4px;
+        transition: all 0.3s ease;
+      }
+
+      .form-group input {
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1em;
+        transition: all 0.3s;
+        background: var(--input-bg);
+        color: var(--text-primary);
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: var(--border-color);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .submit-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 40px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        width: 100%;
+        max-width: 300px;
+        display: block;
+        margin: 0 auto;
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+      }
+
+      .submit-btn:active {
+        transform: translateY(0);
+      }
+
+      .info-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 30px;
+      }
+
+      .info-section h3 {
+        color: #667eea;
+        margin-bottom: 10px;
+      }
+
+      .info-section p {
+        color: #666;
+        line-height: 1.6;
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .nav-btn {
+        padding: 10px 20px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+
+      .nav-btn:hover {
+        background: white;
+        color: #667eea;
+      }
+
+      .nav-btn.active {
+        background: white;
+        color: #667eea;
+      }
+
+      /* Animated Background */
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 50%,
+          #667eea 100%
+        );
+        background-size: 200% 200%;
+        animation: gradientMove 15s ease infinite;
+      }
+
+      /* Container Float Animation */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .container {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      /* Form Field Animations */
+      .form-group input:focus {
+        animation: inputGlow 0.5s ease;
+      }
+
+      @keyframes inputGlow {
+        0%,
+        100% {
+          box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
+        }
+      }
+
+      /* Submit Button Animations */
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .submit-btn {
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      .submit-btn:hover {
+        animation: none;
+      }
+
+      /* Fire Icon Animation */
+      @keyframes flicker {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.8;
+          transform: scale(1.1);
+        }
+      }
+
+      .fire-icon {
+        display: inline-block;
+        animation: flicker 1.5s ease-in-out infinite;
+      }
+
+      /* Nav Button Ripple Effect */
+      .nav-btn {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nav-btn::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      .nav-btn:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+
+      .nav-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="theme-toggle" onclick="toggleTheme()">
+          <span class="theme-toggle-icon" id="themeIcon">🌙</span>
+          <span class="theme-toggle-text" id="themeText">Dark</span>
+        </div>
+        <h1><span class="fire-icon">🔥</span> Fire Weather Index Predictor</h1>
+        <p>Predict FWI using Ridge Regression Model</p>
+        <div class="nav-buttons">
+          <a href="/" class="nav-btn active">Single Prediction</a>
+          <a href="/batch_predict" class="nav-btn">Batch Prediction</a>
+        </div>
+      </div>
+
+      <div class="form-container">
+        <form action="/predict" method="post">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="Temperature">Temperature (°C)</label>
+              <input
+                type="number"
+                step="0.1"
+                id="Temperature"
+                name="Temperature"
+                value="29"
+                required
+              />
+              <small>Air temperature</small>
+            </div>
+
+            <div class="form-group">
+              <label for="RH">RH (%)</label>
+              <input
+                type="number"
+                step="0.1"
+                id="RH"
+                name="RH"
+                value="57"
+                min="0"
+                max="100"
+                required
+              />
+              <small>Relative Humidity</small>
+            </div>
+
+            <div class="form-group">
+              <label for="Ws">Ws (km/h)</label>
+              <input
+                type="number"
+                step="0.1"
+                id="Ws"
+                name="Ws"
+                value="18"
+                required
+              />
+              <small>Wind Speed</small>
+            </div>
+
+            <div class="form-group">
+              <label for="Rain">Rain (mm)</label>
+              <input
+                type="number"
+                step="0.1"
+                id="Rain"
+                name="Rain"
+                value="0"
+                min="0"
+                required
+              />
+              <small>Rainfall amount</small>
+            </div>
+
+            <div class="form-group">
+              <label for="FFMC">FFMC</label>
+              <input
+                type="number"
+                step="0.1"
+                id="FFMC"
+                name="FFMC"
+                value="65.7"
+                required
+              />
+              <small>Fine Fuel Moisture Code</small>
+            </div>
+
+            <div class="form-group">
+              <label for="DMC">DMC</label>
+              <input
+                type="number"
+                step="0.1"
+                id="DMC"
+                name="DMC"
+                value="3.4"
+                required
+              />
+              <small>Duff Moisture Code</small>
+            </div>
+
+            <div class="form-group">
+              <label for="DC">DC</label>
+              <input
+                type="number"
+                step="0.1"
+                id="DC"
+                name="DC"
+                value="7.6"
+                required
+              />
+              <small>Drought Code</small>
+            </div>
+
+            <div class="form-group">
+              <label for="ISI">ISI</label>
+              <input
+                type="number"
+                step="0.1"
+                id="ISI"
+                name="ISI"
+                value="1.3"
+                required
+              />
+              <small>Initial Spread Index</small>
+            </div>
+
+            <div class="form-group">
+              <label for="BUI">BUI</label>
+              <input
+                type="number"
+                step="0.1"
+                id="BUI"
+                name="BUI"
+                value="3.4"
+                required
+              />
+              <small>Buildup Index</small>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">Predict FWI</button>
+        </form>
+
+        <div class="info-section">
+          <h3>About Fire Weather Index (FWI)</h3>
+          <p>
+            The Fire Weather Index (FWI) is a comprehensive indicator of fire
+            danger that combines weather conditions with fuel moisture to assess
+            the potential for fire spread and intensity. Higher FWI values
+            indicate greater fire danger.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleTheme() {
+        const body = document.body;
+        const themeIcon = document.getElementById("themeIcon");
+        const themeText = document.getElementById("themeText");
+
+        body.classList.toggle("dark-mode");
+
+        if (body.classList.contains("dark-mode")) {
+          themeIcon.textContent = "☀️";
+          themeText.textContent = "Light";
+          localStorage.setItem("theme", "dark");
+        } else {
+          themeIcon.textContent = "🌙";
+          themeText.textContent = "Dark";
+          localStorage.setItem("theme", "light");
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const savedTheme = localStorage.getItem("theme");
+        const themeIcon = document.getElementById("themeIcon");
+        const themeText = document.getElementById("themeText");
+
+        if (savedTheme === "dark") {
+          document.body.classList.add("dark-mode");
+          themeIcon.textContent = "☀️";
+          themeText.textContent = "Light";
+        }
+      });
+    </script>
+  </body>
+</html>

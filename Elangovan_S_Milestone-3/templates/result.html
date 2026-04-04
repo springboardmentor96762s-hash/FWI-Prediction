@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FWI Prediction Result</title>
+    <style>
+      :root {
+        /* Light Mode Colors */
+        --bg-gradient-start: #667eea;
+        --bg-gradient-end: #764ba2;
+        --container-bg: #ffffff;
+        --text-primary: #333333;
+        --text-secondary: #666666;
+        --header-bg-start: #667eea;
+        --header-bg-end: #764ba2;
+        --detail-bg: #f8f9fa;
+        --detail-item-bg: #ffffff;
+        --border-color: #667eea;
+        --shadow-color: rgba(0, 0, 0, 0.3);
+      }
+
+      body.dark-mode {
+        /* Dark Mode Colors */
+        --bg-gradient-start: #1a1a2e;
+        --bg-gradient-end: #16213e;
+        --container-bg: #0f3460;
+        --text-primary: #e0e0e0;
+        --text-secondary: #b0b0b0;
+        --header-bg-start: #16213e;
+        --header-bg-end: #0f3460;
+        --detail-bg: #1a1a2e;
+        --detail-item-bg: #16213e;
+        --border-color: #e94560;
+        --shadow-color: rgba(0, 0, 0, 0.7);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          var(--bg-gradient-start) 0%,
+          var(--bg-gradient-end) 100%
+        );
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .container {
+        max-width: 700px;
+        width: 100%;
+        background: var(--container-bg);
+        border-radius: 15px;
+        box-shadow: 0 20px 60px var(--shadow-color);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .header {
+        background: linear-gradient(
+          135deg,
+          var(--header-bg-start) 0%,
+          var(--header-bg-end) 100%
+        );
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+      }
+
+      /* Theme Toggle Button */
+      .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50px;
+        padding: 10px 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .theme-toggle:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+      }
+
+      .theme-toggle-icon {
+        font-size: 1.5em;
+      }
+
+      .theme-toggle-text {
+        font-size: 0.9em;
+        font-weight: 600;
+        color: white;
+      }
+
+      .header h1 {
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+
+      .result-container {
+        padding: 40px;
+      }
+
+      .prediction-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .prediction-label {
+        font-size: 1.2em;
+        opacity: 0.9;
+        margin-bottom: 10px;
+      }
+
+      .prediction-value {
+        font-size: 3.5em;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      .prediction-description {
+        font-size: 1em;
+        opacity: 0.85;
+      }
+
+      .input-details {
+        background: var(--detail-bg);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        transition: all 0.3s ease;
+      }
+
+      .input-details h3 {
+        color: var(--border-color);
+        margin-bottom: 20px;
+        font-size: 1.3em;
+        transition: all 0.3s ease;
+      }
+
+      .details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .detail-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background: var(--detail-item-bg);
+        border-radius: 6px;
+        border-left: 3px solid var(--border-color);
+        transition: all 0.3s ease;
+      }
+
+      .detail-label {
+        font-weight: 600;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+      }
+
+      .detail-value {
+        color: var(--text-secondary);
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .btn-container {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-secondary {
+        background: #e0e0e0;
+        color: #333;
+      }
+
+      .btn-secondary:hover {
+        background: #d0d0d0;
+      }
+
+      .fire-danger {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .danger-low {
+        background: #d4edda;
+        color: #155724;
+        border: 2px solid #c3e6cb;
+      }
+
+      .danger-moderate {
+        background: #fff3cd;
+        color: #856404;
+        border: 2px solid #ffeeba;
+      }
+
+      .danger-high {
+        background: #f8d7da;
+        color: #721c24;
+        border: 2px solid #f5c6cb;
+      }
+
+      .danger-extreme {
+        background: #d6d8d9;
+        color: #1b1e21;
+        border: 2px solid #c6c8ca;
+      }
+
+      /* Emoji Animations */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      @keyframes sweat {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(-5deg);
+        }
+        50% {
+          transform: translateY(-5px) rotate(5deg);
+        }
+      }
+
+      @keyframes burn {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0) rotate(0deg);
+        }
+        25% {
+          transform: translateX(-5px) rotate(-2deg);
+        }
+        75% {
+          transform: translateX(5px) rotate(2deg);
+        }
+      }
+
+      .emoji-container {
+        text-align: center;
+        margin: 40px 0;
+        padding: 40px;
+        border-radius: 20px;
+        transition: all 0.5s ease;
+      }
+
+      .emoji-container img {
+        width: 200px;
+        height: 200px;
+      }
+
+      /* Wind Particle Animation */
+      .wind-particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      .wind-particle {
+        position: absolute;
+        border-radius: 50%;
+        animation: windFlow linear infinite;
+        box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+        filter: blur(1px);
+      }
+
+      @keyframes windFlow {
+        0% {
+          transform: translateX(-100px) translateY(0) scale(1);
+          opacity: 0;
+        }
+        5% {
+          opacity: 1;
+        }
+        95% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(calc(100vw + 100px)) translateY(var(--drift))
+            scale(1.2);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Full-Screen Wind Particle Effect -->
+    <div class="wind-particles" id="windParticles"></div>
+    <div class="container">
+      <div class="header">
+        <!-- Theme Toggle Button -->
+        <div class="theme-toggle" onclick="toggleTheme()">
+          <span class="theme-toggle-icon" id="themeIcon">🌙</span>
+          <span class="theme-toggle-text" id="themeText">Dark</span>
+        </div>
+        <h1>🔥 Prediction Result</h1>
+      </div>
+
+      <div class="result-container">
+        <div class="prediction-box">
+          <div class="prediction-label">Fire Weather Index (FWI)</div>
+          <div class="prediction-value">{{ "%.2f"|format(prediction) }}</div>
+          <div class="prediction-description">
+            Predicted using Ridge Regression Model
+          </div>
+        </div>
+
+        <!-- Emoji Character Display -->
+        <div
+          class="emoji-container"
+          style="
+          {% if prediction < 5 %}
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+          {% elif prediction < 15 %}
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+          {% elif prediction < 30 %}
+            background: linear-gradient(135deg, #FFE0B2 0%, #FFAB91 100%);
+          {% else %}
+            background: linear-gradient(135deg, #FFCCBC 0%, #FF8A65 100%);
+          {% endif %}
+        "
+        >
+          {% if prediction < 5 %}
+          <!-- LOW DANGER -->
+          <div style="position: relative; display: inline-block">
+            <img
+              src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Smiling%20face%20with%20sunglasses/3D/smiling_face_with_sunglasses_3d.png"
+              alt="Safe"
+              style="
+                animation: float 3s ease-in-out infinite;
+                filter: drop-shadow(0 10px 20px rgba(76, 175, 80, 0.5));
+              "
+            />
+            <p
+              style="
+                margin-top: 15px;
+                font-size: 18px;
+                font-weight: bold;
+                color: #4caf50;
+              "
+            >
+              😎 All Safe & Cool!
+            </p>
+            <p
+              style="
+                margin-top: 10px;
+                font-size: 14px;
+                font-style: italic;
+                color: #388e3c;
+                max-width: 350px;
+              "
+            >
+              "Achievement Unlocked: 'Nature's Best Friend' - Even the trees are
+              giving you a thumbs up! 🌲👍😎"
+            </p>
+          </div>
+
+          {% elif prediction < 15 %}
+          <!-- MODERATE DANGER -->
+          <div style="position: relative; display: inline-block">
+            <img
+              src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Anxious%20face%20with%20sweat/3D/anxious_face_with_sweat_3d.png"
+              alt="Caution"
+              style="
+                animation: sweat 1s ease-in-out infinite;
+                filter: drop-shadow(0 10px 20px rgba(255, 193, 7, 0.5));
+              "
+            />
+            <p
+              style="
+                margin-top: 15px;
+                font-size: 18px;
+                font-weight: bold;
+                color: #ffa000;
+              "
+            >
+              😰 Be Careful!
+            </p>
+            <p
+              style="
+                margin-top: 10px;
+                font-size: 14px;
+                font-style: italic;
+                color: #f57c00;
+                max-width: 350px;
+              "
+            >
+              "Warning: You've entered 'Slightly Toasted' mode. Smokey the Bear
+              is now on speed dial! 🐻🔥📞"
+            </p>
+          </div>
+
+          {% elif prediction < 30 %}
+          <!-- HIGH DANGER -->
+          <div style="position: relative; display: inline-block">
+            <img
+              src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Hot%20face/3D/hot_face_3d.png"
+              alt="Danger"
+              style="
+                animation: burn 0.5s ease-in-out infinite;
+                filter: drop-shadow(0 10px 30px rgba(244, 67, 54, 0.7));
+              "
+            />
+            <p
+              style="
+                margin-top: 15px;
+                font-size: 18px;
+                font-weight: bold;
+                color: #d32f2f;
+              "
+            >
+              🔥 High Danger!!
+            </p>
+            <p
+              style="
+                margin-top: 10px;
+                font-size: 14px;
+                font-style: italic;
+                color: #c62828;
+                max-width: 350px;
+              "
+            >
+              "Alert: 'Crispy Mode' activated! Mother Nature just equipped her
+              flamethrower. Run! 🔥💨🏃"
+            </p>
+          </div>
+
+          {% else %}
+          <!-- EXTREME DANGER -->
+          <div
+            style="
+              position: relative;
+              display: inline-block;
+              animation: shake 0.3s ease-in-out infinite;
+            "
+          >
+            <img
+              src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Face%20screaming%20in%20fear/3D/face_screaming_in_fear_3d.png"
+              alt="Extreme Danger"
+              style="filter: drop-shadow(0 15px 40px rgba(183, 28, 28, 0.9))"
+            />
+            <p
+              style="
+                margin-top: 15px;
+                font-size: 20px;
+                font-weight: bold;
+                color: #b71c1c;
+              "
+            >
+              ⚠⚠ EXTREME DANGER! ⚠⚠
+            </p>
+            <p
+              style="
+                margin-top: 10px;
+                font-size: 14px;
+                font-style: italic;
+                color: #8b0000;
+                max-width: 350px;
+              "
+            >
+              "Congratulations! You've unlocked the 'Hell on Earth' achievement.
+              Even Satan's checking the weather! 😈🔥"
+            </p>
+          </div>
+          {% endif %}
+        </div>
+
+        {% set fwi = prediction %} {% if fwi < 5 %}
+        <div class="fire-danger danger-low">
+          ✓ Low Fire Danger - FWI below 5
+        </div>
+        {% elif fwi < 15 %}
+        <div class="fire-danger danger-moderate">
+          ⚠ Moderate Fire Danger - FWI between 5 and 15
+        </div>
+        {% elif fwi < 30 %}
+        <div class="fire-danger danger-high">
+          ⚠⚠ High Fire Danger - FWI between 15 and 30
+        </div>
+        {% else %}
+        <div class="fire-danger danger-extreme">
+          ⚠⚠⚠ Extreme Fire Danger - FWI above 30
+        </div>
+        {% endif %}
+
+        <div class="input-details">
+          <h3>Input Parameters</h3>
+          <div class="details-grid">
+            {% for key, value in features.items() %}
+            <div class="detail-item">
+              <span class="detail-label">{{ key }}:</span>
+              <span class="detail-value"
+                >{{ "%.2f"|format(value) if value is number else value }}</span
+              >
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <a href="/" class="btn btn-primary">New Prediction</a>
+          <button onclick="window.print()" class="btn btn-secondary">
+            Print Result
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Dark Mode Toggle Functionality
+      function toggleTheme() {
+        const body = document.body;
+        const themeIcon = document.getElementById("themeIcon");
+        const themeText = document.getElementById("themeText");
+
+        body.classList.toggle("dark-mode");
+
+        if (body.classList.contains("dark-mode")) {
+          themeIcon.textContent = "☀️";
+          themeText.textContent = "Light";
+          localStorage.setItem("theme", "dark");
+        } else {
+          themeIcon.textContent = "🌙";
+          themeText.textContent = "Dark";
+          localStorage.setItem("theme", "light");
+        }
+      }
+
+      // Load saved theme on page load
+      window.addEventListener("DOMContentLoaded", () => {
+        const savedTheme = localStorage.getItem("theme");
+        const themeIcon = document.getElementById("themeIcon");
+        const themeText = document.getElementById("themeText");
+
+        if (savedTheme === "dark") {
+          document.body.classList.add("dark-mode");
+          themeIcon.textContent = "☀️";
+          themeText.textContent = "Light";
+        }
+      });
+
+      // Wind Particle Animation based on Wind Speed
+      const windSpeed = {{ features['Ws'] }};
+
+      // Configure particle system based on wind speed
+      let particleCount, particleDuration, particleSize;
+      let particleColor = 'rgba(144, 202, 249, 0.4)'; // Light blue
+
+      if (windSpeed < 10) {
+        // Light breeze
+        particleCount = 50;
+        particleDuration = [8, 12];
+        particleSize = [3, 6];
+      } else if (windSpeed < 20) {
+        // Moderate wind
+        particleCount = 80;
+        particleDuration = [5, 8];
+        particleSize = [4, 8];
+      } else {
+        // Strong wind
+        particleCount = 120;
+        particleDuration = [3, 5];
+        particleSize = [5, 10];
+      }
+
+      // Create wind particles
+      const container = document.getElementById('windParticles');
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'wind-particle';
+
+        // Random positioning
+        const startY = Math.random() * 100;
+        const drift = (Math.random() - 0.5) * 300; // Vertical drift
+        const duration = particleDuration[0] + Math.random() * (particleDuration[1] - particleDuration[0]);
+        const delay = Math.random() * 5;
+        const size = particleSize[0] + Math.random() * (particleSize[1] - particleSize[0]);
+
+        particle.style.top = startY + '%';
+        particle.style.left = '-100px';
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.background = particleColor;
+        particle.style.color = particleColor; // For box-shadow
+        particle.style.setProperty('--drift', drift + 'px');
+        particle.style.animationDuration = duration + 's';
+        particle.style.animationDelay = delay + 's';
+
+        container.appendChild(particle);
+      }
+
+      // Wind particles stay forever - no timeout removal!
+    </script>
+  </body>
+</html>

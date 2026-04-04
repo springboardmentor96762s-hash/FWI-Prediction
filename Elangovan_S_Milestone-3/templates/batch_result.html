@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Batch Prediction Results</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 50%,
+          #667eea 100%
+        );
+        background-size: 200% 200%;
+        animation: gradientMove 15s ease infinite;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .content {
+        padding: 40px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 25px;
+        border-radius: 12px;
+        text-align: center;
+        border-left: 4px solid #667eea;
+        transition: transform 0.3s;
+        animation: slideIn 0.6s ease-out;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .stat-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .stat-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .stat-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes countUp {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .stat-value {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #667eea;
+        margin: 10px 0;
+        animation: countUp 0.8s ease-out;
+      }
+
+      .stat-label {
+        font-size: 0.9em;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .danger-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .danger-card {
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        color: white;
+        font-weight: 600;
+      }
+
+      .danger-low {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      }
+
+      .danger-moderate {
+        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+      }
+
+      .danger-high {
+        background: linear-gradient(135deg, #ff6f00 0%, #f57c00 100%);
+      }
+
+      .danger-extreme {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      }
+
+      .danger-card .count {
+        font-size: 2em;
+        margin-bottom: 5px;
+      }
+
+      .danger-card .label {
+        font-size: 0.9em;
+        opacity: 0.9;
+      }
+
+      .section {
+        margin-bottom: 30px;
+      }
+
+      .section h2 {
+        color: #333;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #667eea;
+      }
+
+      .preview-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .preview-table th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .preview-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .preview-table tr:hover {
+        background: #f8f9fa;
+      }
+
+      .preview-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .table {
+        font-size: 0.9em;
+      }
+
+      .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
+
+      .btn-container {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 30px;
+      }
+
+      .btn {
+        padding: 15px 35px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-outline {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+      }
+
+      .btn-outline:hover {
+        background: #667eea;
+        color: white;
+      }
+
+      .info-box {
+        background: #e3f2fd;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #2196f3;
+        margin-bottom: 20px;
+      }
+
+      .info-box p {
+        color: #555;
+        margin: 0;
+      }
+
+      @media print {
+        body {
+          background: white;
+        }
+        .btn-container {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>✅ Batch Prediction Results</h1>
+        <p>FWI predictions completed successfully</p>
+      </div>
+
+      <div class="content">
+        <!-- Overall Statistics -->
+        <div class="section">
+          <h2>📊 Overall Statistics</h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">Total Records</div>
+              <div class="stat-value">{{ stats.total_records }}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Average FWI</div>
+              <div class="stat-value">{{ "%.2f"|format(stats.avg_fwi) }}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Minimum FWI</div>
+              <div class="stat-value">{{ "%.2f"|format(stats.min_fwi) }}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Maximum FWI</div>
+              <div class="stat-value">{{ "%.2f"|format(stats.max_fwi) }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danger Level Distribution -->
+        <div class="section">
+          <h2>🔥 Fire Danger Distribution</h2>
+          <div class="danger-stats">
+            <div class="danger-card danger-low">
+              <div class="count">{{ stats.low_danger }}</div>
+              <div class="label">Low Danger<br />(FWI &lt; 5)</div>
+            </div>
+            <div class="danger-card danger-moderate">
+              <div class="count">{{ stats.moderate_danger }}</div>
+              <div class="label">Moderate Danger<br />(5 ≤ FWI &lt; 15)</div>
+            </div>
+            <div class="danger-card danger-high">
+              <div class="count">{{ stats.high_danger }}</div>
+              <div class="label">High Danger<br />(15 ≤ FWI &lt; 30)</div>
+            </div>
+            <div class="danger-card danger-extreme">
+              <div class="count">{{ stats.extreme_danger }}</div>
+              <div class="label">Extreme Danger<br />(FWI ≥ 30)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Preview -->
+        <div class="section">
+          <h2>📋 Results Preview (First 10 Rows)</h2>
+          <div class="info-box">
+            <p>
+              Showing first 10 rows. Download the full results file to see all
+              predictions.
+            </p>
+          </div>
+          <div style="overflow-x: auto">{{ preview|safe }}</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="btn-container">
+          <a href="/download/{{ download_file }}" class="btn btn-primary">
+            ⬇️ Download Full Results (CSV)
+          </a>
+          <a href="/batch_predict" class="btn btn-secondary">
+            📁 Upload Another File
+          </a>
+          <a href="/" class="btn btn-outline"> 🏠 Back to Home </a>
+          <button onclick="window.print()" class="btn btn-outline">
+            🖨️ Print Results
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
